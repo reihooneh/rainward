@@ -1,0 +1,75 @@
+<!--{"title":"Rainward · where your yard's rain goes, and how to catch it","description":"Rainward follows a storm across a home's lot, shows where water runs, pools against the house and leaves, and plans the rain gardens, downpipe changes, tanks and regrading that do the most good for the money.","nav":"index","script":"home.js"}-->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">Stormwater for one house</p>
+      <h1>Where your yard's rain goes, and how to catch it</h1>
+      <p class="lede">Rainward follows a storm across a lot, cell by cell: what soaks in, what runs along the walls, what pools for days and what pours onto the neighbours. Then it finds the rain gardens, downpipe changes, tanks and regrading that do the most good for your budget.</p>
+      <div class="cta">
+        <a class="button" href="planner.html">Plan a yard</a>
+        <a class="button ghost" href="water.html">How water moves</a>
+      </div>
+    </div>
+    <div>
+      <div class="stage" id="hero-stage"><canvas id="hero" aria-label="A sloping block on clay in a five-year storm, with Rainward's plan in place."></canvas></div>
+      <div class="timebar">
+        <button class="button small" id="play" type="button">Play the storm</button>
+        <div class="seg" id="which" role="group" aria-label="Show">
+          <button type="button" data-value="today">Today</button>
+          <button type="button" data-value="plan">With the plan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <h2>One sloping block, one five-year storm</h2>
+    <p class="lede">Worked out live in your browser, the moment this page loaded.</p>
+    <div class="big-stats">
+      <div class="stat"><div class="k">Water running along the house today</div><div class="v" id="s-wall"></div></div>
+      <div class="stat"><div class="k">Cut by Rainward's plan</div><div class="v" id="s-cut"></div></div>
+      <div class="stat"><div class="k">For</div><div class="v" id="s-cost"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="wrap">
+    <h2>What it does</h2>
+    <div class="grid-3 how">
+      <div class="card">
+        <h3>Follows every drop</h3>
+        <p>The lot becomes a grid of half-metre cells. A priority flood finds every hollow and where it overflows; water soaks in at your soil's rate, fills hollows and spills downhill, split among lower neighbours by slope.</p>
+      </div>
+      <div class="card">
+        <h3>Watches the storm</h3>
+        <p>A shallow-water simulation, the kind flood engineers use, plays the storm out second by second, so you can watch sheets of water cross the lawn and pools rise and drain. Every litre is accounted for.</p>
+      </div>
+      <div class="card">
+        <h3>Plans for the money</h3>
+        <p>It tries rain gardens in the flow paths, downpipe extensions, pipes into gardens, tanks and regrading, alone and together, and picks what keeps the most water off the house and the neighbours within your budget.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap grid-2">
+    <div>
+      <h2>Why it matters</h2>
+      <p>Water against a house's footings is a leading cause of damp, cracked slabs and subsiding paths, and the usual fixes are cheap if they're in the right place. A rain garden in the wrong spot catches nothing; a downpipe extension pointing uphill just brings the water back.</p>
+      <p>Councils also ask homes not to concentrate runoff onto the neighbours or overload street drains. Rainward shows exactly where each litre goes, so you can see which change does what before anyone picks up a shovel.</p>
+    </div>
+    <div class="card">
+      <h3>Built to be trusted</h3>
+      <ul>
+        <li>The engine is Go, compiled to WebAssembly, running on your device.</li>
+        <li>Tested against known answers: a bowl's exact volume, every drop accounted for, the two water models agreeing, and the planner matching exhaustive search on small lots.</li>
+        <li>No sign-in, no tracking, nothing sent anywhere.</li>
+      </ul>
+      <a class="button ghost small" href="method.html">How it works</a>
+    </div>
+  </div>
+</section>
