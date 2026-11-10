@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Least privilege: jobs can read the code and nothing else unless they say so.
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  engine:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.7' # the same Go builds the same WebAssembly as the committed one
+      - name: Format and vet (engine, command line and the WebAssembly build)
+        run: make lint
+      - name: Tests (water balance, flood tree, both models agree, planner against exhaustive search)
+        run: make test
+      - name: Race detector on the core tests
+        run: make race
+      - name: Fuzz the lot parser for a short while
+        run: go test -run=NONE -fuzz=FuzzParseLot -fuzztime=20s ./engine
+
+  site:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.7'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install the pinned packages and the test browser
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+      - name: Rebuild the WebAssembly and the site, and check the committed copy matches
+        run: |
+          make wasm
+          npm run build
+          git diff --exit-code -- site
+      - name: Browser tests at phone, tablet and desktop sizes
+        run: npm test
+      - name: Audit dependencies
+        run: npm audit --audit-level=moderate
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [engine, site]
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - name: Publish only the built site folder
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4
