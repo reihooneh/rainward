@@ -57,7 +57,7 @@ func TestBadInput(t *testing.T) {
 	cases := [][]string{
 		{},
 		{"-storm", "hurricane", "../../lots/clay-slope.json"},
-		{"-budget", "-1", "../../lots/clay-slope.json"},
+		{"-budget", "-5", "../../lots/clay-slope.json"},
 		{"-budget", "999999", "../../lots/clay-slope.json"},
 		{"-evil", "../../lots/clay-slope.json"},
 		{dir},

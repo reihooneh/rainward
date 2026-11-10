@@ -27,13 +27,13 @@ func run(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 	fs.SetOutput(io.Discard)
 	asJSON := fs.Bool("json", false, "")
 	storm := fs.String("storm", "", "")
-	budget := fs.Int("budget", 0, "")
+	budget := fs.Int("budget", -1, "")
 	usage := "usage: rainward [-storm downpour|five-year|twenty-year] [-budget dollars] [-json] <lot.json>   (or - for standard input)"
 	if err := fs.Parse(args); err != nil || fs.NArg() != 1 {
 		fmt.Fprintln(stderr, usage)
 		return 2
 	}
-	if *budget < 0 || *budget > 50000 {
+	if *budget != -1 && (*budget < 0 || *budget > 50000) {
 		fmt.Fprintln(stderr, "rainward: -budget is 0 to 50000 dollars")
 		return 2
 	}
@@ -55,7 +55,7 @@ func run(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 	lot, err := engine.ParseLot(r)
 	if err == nil {
 		var res *engine.Result
-		res, err = engine.Run(lot, engine.Options{Storm: *storm, Budget: *budget})
+		res, err = engine.Run(lot, engine.Options{Storm: *storm, Budget: *budget, SetBudget: *budget >= 0})
 		if err == nil {
 			if *asJSON {
 				if err := json.NewEncoder(stdout).Encode(res); err != nil {

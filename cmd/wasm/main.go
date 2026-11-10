@@ -44,7 +44,7 @@ func plan(_ js.Value, args []js.Value) (out any) {
 			return fail("budget is 0 to 50000 dollars")
 		}
 		var res *engine.Result
-		res, err = engine.Run(lot, engine.Options{Storm: args[1].String(), Budget: int(budget), Watch: true})
+		res, err = engine.Run(lot, engine.Options{Storm: args[1].String(), Budget: int(budget), SetBudget: true, Watch: true})
 		if err == nil {
 			return reply(res)
 		}

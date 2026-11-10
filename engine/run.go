@@ -26,7 +26,7 @@ type Picture struct {
 	NY    int     `json:"ny"`
 	Cell  float64 `json:"cell"`
 	Z     []int   `json:"z"`     // mm
-	Kind  []uint8 `json:"kind"`  // 0 lawn, 1 paving, 2 garden, 3 building, 4 rain garden, 5 berm
+	Kind  []int   `json:"kind"`  // 0 lawn, 1 paving, 2 garden, 3 building, 4 rain garden, 5 berm
 	Depth []int   `json:"depth"` // standing water at the end of the storm, mm
 	Flow  []int   `json:"flow"`  // litres that ran through the cell
 }
@@ -69,9 +69,10 @@ type Result struct {
 
 // Options override a lot's own storm and budget.
 type Options struct {
-	Storm  string
-	Budget int
-	Watch  bool // run the animated simulations too
+	Storm     string
+	Budget    int // dollars, used when SetBudget is true (so a budget of 0 can be asked for)
+	SetBudget bool
+	Watch     bool // run the animated simulations too
 }
 
 // Run plans a lot: routes the storm today, finds the best plan in budget, and (optionally)
@@ -83,7 +84,7 @@ func Run(l *Lot, o Options) (*Result, error) {
 		}
 		l.Storm = o.Storm
 	}
-	if o.Budget != 0 {
+	if o.SetBudget {
 		if o.Budget < 0 || o.Budget > 50000 {
 			return nil, bad("budget is 0 to 50000 dollars")
 		}
@@ -115,8 +116,9 @@ func Run(l *Lot, o Options) (*Result, error) {
 
 func picture(g *Grid, o *Outcome) Picture {
 	n := g.n()
-	pic := Picture{NX: g.NX, NY: g.NY, Cell: g.Cell, Z: make([]int, n), Kind: g.Kind, Depth: make([]int, n), Flow: make([]int, n)}
+	pic := Picture{NX: g.NX, NY: g.NY, Cell: g.Cell, Z: make([]int, n), Kind: make([]int, n), Depth: make([]int, n), Flow: make([]int, n)}
 	for i := 0; i < n; i++ {
+		pic.Kind[i] = int(g.Kind[i]) // as numbers: a byte slice would travel as base64 text
 		pic.Z[i] = int(math.Round(g.Z[i] * 1000))
 		pic.Depth[i] = int(math.Round(o.Depth[i] * 1000))
 		pic.Flow[i] = int(math.Round(o.Flow[i] * 1000))

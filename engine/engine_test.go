@@ -310,8 +310,8 @@ func TestTheFastModelAgreesWithTheSimulation(t *testing.T) {
 func TestPlansStayInBudgetAndHelp(t *testing.T) {
 	for _, name := range exampleLots {
 		l := loadLot(t, name)
-		for _, budget := range []int{250, 1500, 6000} {
-			res, err := Run(l, Options{Budget: budget})
+		for _, budget := range []int{0, 250, 1500, 6000} {
+			res, err := Run(l, Options{Budget: budget, SetBudget: true})
 			if err != nil {
 				t.Fatal(err)
 			}
