@@ -526,3 +526,39 @@ func FuzzParseLot(f *testing.F) {
 }
 
 var _ = fmt.Sprint
+
+// The largest lot allowed, full of downpipes and hollows, still plans in seconds: the search stops
+// at its work limit and says so.
+func TestTheLargestLotPlansInBoundedTime(t *testing.T) {
+	l := &Lot{Name: "Worst case", Width: 60, Depth: 60, Soil: "clay", Budget: 50000, Storm: "twenty-year",
+		Features: []Feature{{Kind: "slope", DX: 0.01, DY: 0.02}}}
+	for i := 0; i < 39; i++ {
+		l.Features = append(l.Features, Feature{Kind: "dip", X: 3 + float64(i)*1.4, Y: 3 + float64((i*7)%54), R: 2, H: 0.1})
+	}
+	id := 0
+	for k, at := range [][2]float64{{5, 5}, {25, 5}, {45, 5}, {5, 35}, {25, 35}, {45, 35}} {
+		b := Building{Name: fmt.Sprintf("B%d", k+1), Home: k == 0, X: at[0], Y: at[1], W: 8, D: 8}
+		for _, d := range [][2]float64{{0, 0.3}, {8, 0.3}, {0, 7.7}} {
+			if id < MaxDownpipes {
+				b.Downpipes = append(b.Downpipes, Downpipe{ID: string(rune('A' + id)), X: at[0] + d[0], Y: at[1] + d[1], Roof: 20})
+				id++
+			}
+		}
+		l.Buildings = append(l.Buildings, b)
+	}
+	if err := l.Validate(); err != nil {
+		t.Fatal(err)
+	}
+	g, err := NewGrid(l)
+	if err != nil {
+		t.Fatal(err)
+	}
+	p := NewPlanner(g, StormByID(l.Storm))
+	s, _ := p.Best(float64(l.Budget))
+	if !p.Stopped || p.Spent > WorkLimit+2*g.n()*len(p.moves(p.Empty())) {
+		t.Errorf("stopped %v after %d cell-routings", p.Stopped, p.Spent)
+	}
+	if p.Score(s).Damage >= p.Score(p.Empty()).Damage {
+		t.Error("even a stopped search should find something that helps")
+	}
+}

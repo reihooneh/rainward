@@ -61,6 +61,7 @@ type Result struct {
 	Actions   []Action `json:"actions"`
 	Cost      float64  `json:"cost"`
 	Evals     int      `json:"evaluations"`
+	Complete  bool     `json:"complete"` // false if the search hit its work limit
 	Before    Picture  `json:"before"`
 	After     Picture  `json:"after"`
 	WatchNow  *Watch   `json:"watchToday"`
@@ -111,6 +112,7 @@ func Run(l *Lot, o Options) (*Result, error) {
 		res.WatchPlan = watch(after, st, tanks)
 	}
 	res.Evals = p.Evals
+	res.Complete = !p.Stopped
 	return res, nil
 }
 

@@ -130,6 +130,10 @@ type Planner struct {
 	regradable [4]bool
 	cache      map[string]*Outcome
 	Evals      int
+	// Spent counts the work done (cells routed); the search stops trying new plans past
+	// WorkLimit, so even the largest lot plans in seconds. Stopped says it did.
+	Spent   int
+	Stopped bool
 }
 
 // NewPlanner finds candidate rain garden sites (on lawn or garden beds, clear of buildings and
@@ -383,6 +387,18 @@ func gardenCells(g *Grid, centre, side int) []int {
 }
 
 // Score routes the storm through a plan (remembering the answer).
+// WorkLimit is how many cell-routings a plan may use: about a hundred million operations.
+const WorkLimit = 12_000_000
+
+// affordable says whether scoring s is still within the work limit (plans already scored are free).
+func (p *Planner) affordable(s State) bool {
+	if _, ok := p.cache[s.key()]; ok || p.Spent < WorkLimit {
+		return true
+	}
+	p.Stopped = true
+	return false
+}
+
 func (p *Planner) Score(s State) *Outcome {
 	k := s.key()
 	if o, ok := p.cache[k]; ok {
@@ -391,6 +407,7 @@ func (p *Planner) Score(s State) *Outcome {
 	g, tanks := p.Apply(s)
 	o := g.Route(p.Storm, tanks, false)
 	p.Evals++
+	p.Spent += g.n()
 	p.cache[k] = o
 	return o
 }
@@ -497,7 +514,7 @@ func (p *Planner) greedy(start State, budget float64, byValue bool) State {
 		found := false
 		baseCost := p.Cost(s)
 		for _, t := range p.moves(s) {
-			if !p.Valid(t) {
+			if !p.Valid(t) || !p.affordable(t) {
 				continue
 			}
 			c := p.Cost(t)
@@ -538,7 +555,7 @@ func (p *Planner) Best(budget float64) (State, []Step) {
 	var singles []single
 	base := p.Score(empty).Damage
 	for _, t := range p.moves(empty) {
-		if p.Valid(t) && p.Cost(t) <= budget {
+		if p.Valid(t) && p.Cost(t) <= budget && p.affordable(t) {
 			singles = append(singles, single{t, base - p.Score(t).Damage})
 		}
 	}
@@ -584,7 +601,7 @@ func (p *Planner) order(target State) []Step {
 		bestRatio := math.Inf(-1)
 		cur := p.Score(s).Damage
 		for _, t := range p.moves(s) {
-			if !p.Valid(t) || !partOf(t, target) {
+			if !p.Valid(t) || !partOf(t, target) || !p.affordable(t) {
 				continue
 			}
 			gain := cur - p.Score(t).Damage

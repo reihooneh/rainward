@@ -146,7 +146,7 @@ async function run() {
   if (id !== state.run) return;
   state.res = res;
   render(res);
-  status(`Compared ${whole(res.evaluations)} ${res.evaluations === 1 ? 'plan' : 'plans'} for a ${res.storm.name.toLowerCase()} on ${res.soil.name.toLowerCase()} soil.`);
+  status(`Compared ${whole(res.evaluations)} ${res.evaluations === 1 ? 'plan' : 'plans'} for a ${res.storm.name.toLowerCase()} on ${res.soil.name.toLowerCase()} soil${res.complete ? '' : ' (a big lot: the search stopped at its time limit, so this is the best plan found)'}.`);
   document.body.dataset.ready = '1';
 }
 
