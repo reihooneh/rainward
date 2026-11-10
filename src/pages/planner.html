@@ -1,0 +1,90 @@
+<!--{"title":"Plan your yard · Rainward","description":"Follow a storm across a yard, see where the water runs and pools, and get the rain gardens, downpipe changes, tanks and regrading that do the most good for your budget.","nav":"planner","script":"planner.js"}-->
+<div class="wrap planner">
+  <aside class="panel" aria-label="Settings">
+    <div class="card">
+      <h2 class="h3">The lot</h2>
+      <label class="field" for="lot">Lot</label>
+      <select id="lot">
+        <option value="clay-slope">Sloping block on clay</option>
+        <option value="corner-loam">Corner block on loam</option>
+        <option value="sandy-flat">Flat block on sand</option>
+      </select>
+      <p id="about" class="small muted"></p>
+      <div class="row">
+        <button class="button ghost small" id="load" type="button">Load a lot (JSON)</button>
+        <button class="button ghost small" id="save" type="button">Download this lot</button>
+      </div>
+      <input type="file" id="file" accept=".json,application/json" hidden>
+      <p id="load-error" class="error" role="alert" hidden></p>
+    </div>
+    <div class="card">
+      <span class="field" id="storm-label">Storm</span>
+      <div class="seg" id="storm" role="group" aria-labelledby="storm-label"></div>
+      <p id="storm-about" class="small muted"></p>
+      <label class="field" for="budget">Budget: <span id="budget-out"></span></label>
+      <input type="range" id="budget" min="0" max="10000" step="250" value="3000">
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+    </div>
+  </aside>
+
+  <section aria-labelledby="title">
+    <p class="eyebrow">Planner</p>
+    <h1 id="title">Plan your yard</h1>
+    <p class="lede">Rainward follows the storm across the lot, cell by cell, then tries rain gardens, downpipe extensions, pipes into gardens, tanks and regrading, alone and together, to find what keeps the most water off the house and the neighbours for the money.</p>
+    <p class="headline" id="headline"></p>
+    <div class="stats" id="stats"></div>
+
+    <div class="card">
+      <div class="view-bar">
+        <div class="seg" id="which" role="group" aria-label="Show">
+          <button type="button" data-value="today" id="v-today">Today</button>
+          <button type="button" data-value="plan" id="v-plan">With the plan</button>
+        </div>
+        <div class="seg" id="view" role="group" aria-label="View">
+          <button type="button" data-value="3d" id="v-3d">3D</button>
+          <button type="button" data-value="map" id="v-map">Map</button>
+        </div>
+      </div>
+      <div class="stage" id="stage"><canvas id="c3d" aria-label="The lot in 3D, with the storm's water. Drag to turn it."></canvas></div>
+      <canvas class="plan2d" id="c2d" hidden aria-label="The lot from above: where water ran and pooled, and the plan's changes."></canvas>
+      <div class="timebar">
+        <button class="button small" id="play" type="button">Play the storm</button>
+        <input type="range" id="time" min="0" max="60" step="0.05" value="60" aria-label="Minutes since the rain began">
+        <span class="clock" id="clock"></span>
+      </div>
+      <div class="legend" id="legend">
+        <span><i class="swatch sw-lawn"></i>Lawn</span>
+        <span><i class="swatch sw-paving"></i>Paving</span>
+        <span><i class="swatch sw-garden"></i>Garden bed, rain garden</span>
+        <span><i class="swatch sw-flow"></i>Where water ran (map)</span>
+        <span><i class="swatch sw-pond"></i>Standing water</span>
+        <span><i class="swatch sw-plan"></i>The plan</span>
+      </div>
+    </div>
+
+    <div class="grid-2 results">
+      <div class="card">
+        <h2 class="h3">The plan, best value first</h2>
+        <ol class="steps" id="steps"></ol>
+        <p class="total" id="total"></p>
+      </div>
+      <div class="card">
+        <h2 class="h3">Where the water went</h2>
+        <div class="figure" id="balance"></div>
+        <table class="balance-table" id="balance-table">
+          <thead><tr><th scope="col">For the whole storm</th><th scope="col" class="num">Today</th><th scope="col" class="num">With the plan</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="h3">Where water stands after the storm</h2>
+      <table id="ponds">
+        <thead><tr><th scope="col">Where</th><th scope="col" class="num">Holds</th><th scope="col" class="num">Deepest</th><th scope="col" class="num">Soaks away in</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <p class="small muted" id="ponds-note"></p>
+    </div>
+  </section>
+</div>
