@@ -21,6 +21,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '1.24.7' # the same Go builds the same WebAssembly as the committed one
+          cache: false # standard library only: nothing to cache
       - name: Format and vet (engine, command line and the WebAssembly build)
         run: make lint
       - name: Tests (water balance, flood tree, both models agree, planner against exhaustive search)
@@ -37,6 +38,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '1.24.7'
+          cache: false
       - uses: actions/setup-node@v4
         with:
           node-version: 22
