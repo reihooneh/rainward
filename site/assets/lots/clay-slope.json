@@ -1,0 +1,36 @@
+{
+  "name": "Sloping block on clay",
+  "about": "A long suburban block that rises away from the street. The back yard drains straight at the back of the house, and a low corner holds water for days.",
+  "width": 16,
+  "depth": 40,
+  "soil": "clay",
+  "storm": "five-year",
+  "budget": 3000,
+  "features": [
+    { "kind": "slope", "dx": 0.006, "dy": 0.035 },
+    { "kind": "dip", "x": 12.5, "y": 31, "r": 3.2, "h": 0.22 },
+    { "kind": "dip", "x": 5, "y": 24.5, "r": 2.2, "h": 0.12 },
+    { "kind": "mound", "x": 3.5, "y": 36, "r": 3, "h": 0.35 }
+  ],
+  "surfaces": [
+    { "kind": "paving", "name": "Driveway", "x": 0.5, "y": 0, "w": 3, "d": 21 },
+    { "kind": "paving", "name": "Patio", "x": 6, "y": 22, "w": 6, "d": 3 },
+    { "kind": "garden", "name": "Front bed", "x": 10, "y": 1.5, "w": 5, "d": 3 },
+    { "kind": "garden", "name": "Vegetable patch", "x": 1, "y": 30, "w": 4, "d": 4 }
+  ],
+  "buildings": [
+    {
+      "name": "House", "home": true, "x": 4, "y": 8, "w": 10.5, "d": 14, "height": 5,
+      "downpipes": [
+        { "id": "A", "x": 4, "y": 8.5, "roof": 37 },
+        { "id": "B", "x": 14.5, "y": 8.5, "roof": 37 },
+        { "id": "C", "x": 4, "y": 21.5, "roof": 37 },
+        { "id": "D", "x": 14.5, "y": 21.5, "roof": 37 }
+      ]
+    },
+    {
+      "name": "Shed", "x": 12, "y": 36.5, "w": 3, "d": 2.5, "height": 2.4,
+      "downpipes": [ { "id": "E", "x": 12, "y": 37.5, "roof": 7.5 } ]
+    }
+  ]
+}

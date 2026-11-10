@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>How it works · Rainward</title>
+  <meta name="description" content="The models behind Rainward: the lot as a grid, fill and spill, the shallow-water simulation, the planner, what it is tested against, and its limits.">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/atkinson-hyperlegible-next.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script type="module" src="assets/js/method.js"></script>
+</head>
+<body class="page-method">
+  <a class="skip" href="#main">Skip to the content</a>
+  <header class="top">
+    <div class="top-inner">
+      <a class="mark" href="index.html" aria-label="Rainward home">
+        <svg class="mark-icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3c4.5 6 8 10.2 8 14.5a8 8 0 0 1-16 0C8 13.2 11.5 9 16 3z"/><path d="M6 27c3-1.6 5-1.6 8 0s5 1.6 8 0 4-1.2 4-1.2"/></svg>
+        <span>Rainward</span>
+      </a>
+      <nav class="nav" aria-label="Pages">
+        <a href="index.html">Home</a>
+        <a href="planner.html">Plan your yard</a>
+        <a href="water.html">How water moves</a>
+        <a href="method.html" aria-current="page">How it works</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+<section class="section">
+  <div class="wrap prose">
+    <p class="eyebrow">Method</p>
+    <h1>How Rainward works</h1>
+    <p class="lede">A lot is described by its shape, what covers it, and its buildings and downpipes. Rainward turns that into a grid, follows a design storm through it two ways, and searches for the changes that help most.</p>
+
+    <h2>The lot as a grid</h2>
+    <p>The ground is a gentle slope plus mounds, dips and channels, sampled every half metre. Each cell is lawn, paving, a garden bed or a building, and soaks up water at a steady rate for its cover and the soil: 30, 12 or 3 mm an hour for lawn on sand, loam or clay, a little more for loosened garden beds, nothing for paving, and 60 mm an hour for a rain garden's free-draining mix. Each downpipe empties its share of the roof just outside the wall; roof without enough downpipes drips off its edges.</p>
+
+    <h2>The storms</h2>
+    <p>Three one-hour storms of the size suburban drainage is checked against: 25 mm (a downpour most years), 40 mm (about a one-in-five chance each year) and 55 mm (about one in twenty), spread evenly through the hour. Real storms burst harder in places and their depths depend on where you live; the Bureau of Meteorology publishes design rainfall for every Australian location.</p>
+
+    <h2>Fill and spill</h2>
+    <p>A priority flood starts just outside the lot, where the ground is taken to carry on at the slope of the edge, and works inwards lowest first. Each cell learns the lowest level its water must reach before it can escape (its spill level), and which neighbour it drains to. Cells below their spill level are hollows. Water is then passed downhill once, from the top: each cell soaks up what it can in the hour, the rest splits among lower neighbours in proportion to the drop, and a hollow fills before it overflows at its lip. What reaches the street edge goes to the drain; what crosses another edge goes onto a neighbour's land.</p>
+    <p>From that come the numbers the planner cares about: water running within a metre of the house (counted once, when it gets there), water pooled against the house, runoff onto neighbours and to the street, and pools that will take more than a day to soak away. They are combined into one score, in weighted litres: pooling against the house counts five times, water running along the house once, neighbours' land a half, long-lasting pools three tenths and the street a tenth.</p>
+
+    <h2>The storm, second by second</h2>
+    <p>To show the storm, Rainward runs the local inertial form of the shallow-water equations used in flood modelling (Bates, Horritt and Fewtrell 2010). Water depth lives in cells; flow lives on the faces between them and is pushed by the difference in water surface, held back by Manning friction for grass, beds or paving. Time steps follow the Courant condition; a limiter keeps every depth positive; every litre of rain and roof water ends up soaked in, standing, or off the lot, and the tests check the books balance. For speed in the browser it runs on one-metre cells.</p>
+
+    <h2>Planning</h2>
+    <p>The changes on offer are rain gardens (2, 3 or 4 m square, dug 15 cm deep with a low berm, at least 3 m from the house on lawn or beds that aren't too steep, in the paths water takes), extending a downpipe 3 m in one of three directions, piping a downpipe underground to a rain garden (only where a pipe can fall 1 in 100 all the way, and at most 20 m), a 2,000 or 5,000 L tank on a downpipe, and regrading a side of the house so the ground falls 15 cm over its first 3 m. Each has a rough installed price.</p>
+    <p>Rain gardens, pipes and tanks interact, so the planner scores whole plans with the fill-and-spill model. It grows plans greedily (by value per dollar, by size of gain, and from each of the most useful single changes), then keeps trying to swap one part for something better. On small lots where every possible plan can be tried, the tests compare it with that exhaustive search.</p>
+
+    <h2>What the tests check</h2>
+    <ul>
+      <li>Every drop is accounted for, in both models, on the example lots and dozens of random ones.</li>
+      <li>A bowl holds the volume geometry says it should, and a big storm fills it exactly to its lip.</li>
+      <li>More rain makes more runoff; sand sheds less than loam, and loam less than clay.</li>
+      <li>The fast model and the simulation agree on how much water leaves the lot (within 8%).</li>
+      <li>Plans stay in budget, never make things worse, keep rain gardens away from the house, and never pipe water uphill.</li>
+      <li>On 40 small random lots the planner finds the best possible plan, or comes within a hair of it, compared with trying every plan.</li>
+      <li>Hostile lot files are refused without their contents being repeated; the page is tested at phone, tablet and desktop sizes for errors, sideways scrolling and overlapping text.</li>
+    </ul>
+
+    <h2>Limits</h2>
+    <ul>
+      <li>Soil rates are steady averages; real soakage varies across a yard and falls as the ground saturates. Measure yours with a simple hole test before digging.</li>
+      <li>Storms are spread evenly through the hour; the bursts inside a real storm make flows briefly heavier.</li>
+      <li>Ground shape is described by a few features, not surveyed. Pipes, pits, fences and garden edging that steer water aren't modelled.</li>
+      <li>Prices are rough. Anything that drains near a house's footings, connects to the street drain, or changes where water leaves your property may need council approval and a licensed plumber or drainer.</li>
+    </ul>
+
+    <h2>References</h2>
+    <ul class="refs">
+      <li>Bates, P. D., Horritt, M. S. and Fewtrell, T. J. (2010). A simple inertial formulation of the shallow water equations for efficient two-dimensional flood inundation modelling. Journal of Hydrology 387.</li>
+      <li>de Almeida, G. A. M. et al. (2012). Improving the stability of a simple formulation of the shallow water equations for 2-D flood modeling. Water Resources Research 48.</li>
+      <li>Barnes, R., Lehman, C. and Mulla, D. (2014). Priority-flood: an optimal depression-filling and watershed-labeling algorithm for digital elevation models. Computers and Geosciences 62.</li>
+      <li>Quinn, P. et al. (1991). The prediction of hillslope flow paths for distributed hydrological modelling using digital terrain models. Hydrological Processes 5.</li>
+      <li>Australian Rainfall and Runoff: A Guide to Flood Estimation (Geoscience Australia), and the Bureau of Meteorology's design rainfall data.</li>
+    </ul>
+  </div>
+</section>
+  </main>
+  <footer class="foot">
+    <div class="foot-inner">
+      <p>Rainward is open source (MIT). It runs entirely in your browser: no sign-in, no tracking, and lots you load never leave your device. Its soil rates, storms and prices are typical figures for comparing options; for drainage near a house's footings, or anything that changes where water leaves your property, check local rules and ask a licensed plumber or drainer.</p>
+      <p><a href="https://github.com/reihooneh/rainward">Source code and tests on GitHub</a></p>
+    </div>
+  </footer>
+</body>
+</html>

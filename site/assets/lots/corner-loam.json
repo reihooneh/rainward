@@ -1,0 +1,124 @@
+{
+  "name": "Corner block on loam",
+  "about": "A wide corner block whose side slope runs across the yard into the side of the house, with a big patio and a separate garage. Water gathers along the house and in the courtyard behind it.",
+  "width": 24,
+  "depth": 26,
+  "soil": "loam",
+  "storm": "five-year",
+  "budget": 5000,
+  "features": [
+    {
+      "kind": "slope",
+      "dx": -0.03,
+      "dy": 0.012
+    },
+    {
+      "kind": "channel",
+      "x": 23,
+      "y": 20,
+      "x1": 13,
+      "y1": 14,
+      "r": 1.6,
+      "h": 0.12
+    },
+    {
+      "kind": "dip",
+      "x": 6,
+      "y": 21.5,
+      "r": 2.5,
+      "h": 0.15
+    },
+    {
+      "kind": "dip",
+      "x": 15.6,
+      "y": 10.5,
+      "r": 2.6,
+      "h": 0.32
+    }
+  ],
+  "surfaces": [
+    {
+      "kind": "paving",
+      "name": "Driveway",
+      "x": 17.5,
+      "y": 0,
+      "w": 4,
+      "d": 7
+    },
+    {
+      "kind": "paving",
+      "name": "Patio",
+      "x": 3,
+      "y": 16,
+      "w": 8,
+      "d": 3.5
+    },
+    {
+      "kind": "garden",
+      "name": "Courtyard bed",
+      "x": 2,
+      "y": 20,
+      "w": 5,
+      "d": 3
+    }
+  ],
+  "buildings": [
+    {
+      "name": "House",
+      "home": true,
+      "x": 2,
+      "y": 4,
+      "w": 12,
+      "d": 12,
+      "height": 5,
+      "downpipes": [
+        {
+          "id": "A",
+          "x": 2,
+          "y": 4.5,
+          "roof": 36
+        },
+        {
+          "id": "B",
+          "x": 14,
+          "y": 4.5,
+          "roof": 36
+        },
+        {
+          "id": "C",
+          "x": 14,
+          "y": 15.5,
+          "roof": 36
+        },
+        {
+          "id": "D",
+          "x": 2,
+          "y": 15.5,
+          "roof": 36
+        }
+      ]
+    },
+    {
+      "name": "Garage",
+      "x": 17.5,
+      "y": 7,
+      "w": 4,
+      "d": 6,
+      "height": 3,
+      "downpipes": [
+        {
+          "id": "E",
+          "x": 17.5,
+          "y": 12.5,
+          "roof": 12
+        },
+        {
+          "id": "F",
+          "x": 21.5,
+          "y": 12.5,
+          "roof": 12
+        }
+      ]
+    }
+  ]
+}

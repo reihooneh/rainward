@@ -1,0 +1,30 @@
+{
+  "name": "Flat block on sand",
+  "about": "A level block that falls gently away from the street. Sand soaks up a lot, but the long concrete path and a wide roof send water to the back fence and the neighbours.",
+  "width": 15,
+  "depth": 32,
+  "soil": "sand",
+  "storm": "twenty-year",
+  "budget": 2000,
+  "features": [
+    { "kind": "slope", "dx": -0.004, "dy": -0.012 },
+    { "kind": "dip", "x": 9, "y": 27, "r": 4, "h": 0.1 },
+    { "kind": "mound", "x": 3, "y": 4, "r": 2.5, "h": 0.25 }
+  ],
+  "surfaces": [
+    { "kind": "paving", "name": "Side path", "x": 0.5, "y": 2, "w": 1.5, "d": 26 },
+    { "kind": "paving", "name": "Back terrace", "x": 2, "y": 20, "w": 11, "d": 3 },
+    { "kind": "garden", "name": "Native bed", "x": 10, "y": 2, "w": 4, "d": 4 }
+  ],
+  "buildings": [
+    {
+      "name": "House", "home": true, "x": 2.5, "y": 7, "w": 11, "d": 13, "height": 4.5,
+      "downpipes": [
+        { "id": "A", "x": 2.5, "y": 7.5, "roof": 36 },
+        { "id": "B", "x": 13.5, "y": 7.5, "roof": 36 },
+        { "id": "C", "x": 2.5, "y": 19.5, "roof": 36 },
+        { "id": "D", "x": 13.5, "y": 19.5, "roof": 35 }
+      ]
+    }
+  ]
+}

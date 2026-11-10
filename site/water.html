@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>How water moves · Rainward</title>
+  <meta name="description" content="An interactive slice through a yard: watch hollows fill and spill as the rain gets heavier, and see why soil and rain gardens matter.">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/atkinson-hyperlegible-next.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script type="module" src="assets/js/water.js"></script>
+</head>
+<body class="page-water">
+  <a class="skip" href="#main">Skip to the content</a>
+  <header class="top">
+    <div class="top-inner">
+      <a class="mark" href="index.html" aria-label="Rainward home">
+        <svg class="mark-icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3c4.5 6 8 10.2 8 14.5a8 8 0 0 1-16 0C8 13.2 11.5 9 16 3z"/><path d="M6 27c3-1.6 5-1.6 8 0s5 1.6 8 0 4-1.2 4-1.2"/></svg>
+        <span>Rainward</span>
+      </a>
+      <nav class="nav" aria-label="Pages">
+        <a href="index.html">Home</a>
+        <a href="planner.html">Plan your yard</a>
+        <a href="water.html" aria-current="page">How water moves</a>
+        <a href="method.html">How it works</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+<section class="section">
+  <div class="wrap">
+    <p class="eyebrow">Explainer</p>
+    <h1>How water moves through a yard</h1>
+    <p class="lede">Rain that lands on a yard does one of four things: it soaks in, it runs downhill, it fills a hollow, or it leaves. Rainward's fast model is built from exactly those four rules. Here they are on a single slice of ground.</p>
+
+    <div class="card">
+      <h2 class="h3">Fill and spill, in one slice of a yard</h2>
+      <div class="grid-2 controls-2">
+        <div>
+          <label class="field" for="x-rain">Rain in an hour: <span id="x-rain-out"></span></label>
+          <input type="range" id="x-rain" min="0" max="80" step="1" value="40">
+        </div>
+        <div>
+          <label class="field" for="x-soil">Soil</label>
+          <select id="x-soil">
+            <option value="sand">Sandy (lawn soaks 30 mm an hour)</option>
+            <option value="loam" selected>Loam (12 mm an hour)</option>
+            <option value="clay">Clay (3 mm an hour)</option>
+          </select>
+        </div>
+      </div>
+      <div class="figure" id="x-slice"></div>
+      <p class="figcap">The street is on the left. The ground rises to the back fence on the right, with two hollows on the way. Water runs left, soaking in as it goes (the blue band grows with the flow); a hollow catches what reaches it until it is full to its lip, then the rest spills on down. Heights are exaggerated ten times.</p>
+      <div class="readout">
+        <div class="stat"><div class="k">Soaked in</div><div class="v" id="r-soak"></div></div>
+        <div class="stat"><div class="k">Standing in the hollows</div><div class="v" id="r-pond"></div></div>
+        <div class="stat"><div class="k">Ran off to the street</div><div class="v" id="r-off"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="wrap grid-2">
+    <div>
+      <h2>Why the soil decides so much</h2>
+      <p>A lawn on sand can swallow a downpour; the same lawn on clay soaks up barely a tenth as much, and everything else runs. That is why a rain garden on clay is dug out and refilled with a free-draining mix: it soaks water away about twenty times faster than the clay lawn around it, so a bowl 15 cm deep empties in a few hours instead of days.</p>
+      <p>Rainward uses typical steady rates for wet ground. Real yards vary a lot: a simple test is to dig a hole 30 cm deep, fill it with water twice, and time how fast the second filling drops.</p>
+    </div>
+    <div class="figure" id="x-rates"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap grid-2">
+    <div class="card">
+      <h3>The fast model: fill and spill</h3>
+      <p>Used to compare hundreds of plans. A priority flood from the edges finds the level each cell's water must rise to before it can escape, which reveals every hollow. Water then passes downhill once, cell by cell: soaking in, splitting among lower neighbours by slope, filling hollows before they overflow. It takes about a millisecond.</p>
+    </div>
+    <div class="card">
+      <h3>The detailed model: the storm, second by second</h3>
+      <p>Used to show you the storm. The local inertial shallow-water equations push water between neighbouring cells by the slope of its surface, held back by the friction of grass or paving. It takes a few thousand small steps; the tests check both models agree on where the water goes.</p>
+    </div>
+  </div>
+</section>
+  </main>
+  <footer class="foot">
+    <div class="foot-inner">
+      <p>Rainward is open source (MIT). It runs entirely in your browser: no sign-in, no tracking, and lots you load never leave your device. Its soil rates, storms and prices are typical figures for comparing options; for drainage near a house's footings, or anything that changes where water leaves your property, check local rules and ask a licensed plumber or drainer.</p>
+      <p><a href="https://github.com/reihooneh/rainward">Source code and tests on GitHub</a></p>
+    </div>
+  </footer>
+</body>
+</html>
