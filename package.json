@@ -1,0 +1,19 @@
+{
+  "name": "rainward",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Follows a storm across your yard, shows where water runs, pools and leaves, and plans the rain gardens, downpipe changes, tanks and regrading that keep it off your house for the money",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "serve": "node scripts/serve.mjs",
+    "test": "node --test --test-concurrency=1 tests/web/*.test.mjs"
+  },
+  "devDependencies": {
+    "@fontsource-variable/atkinson-hyperlegible-next": "5.3.0",
+    "@fontsource-variable/bricolage-grotesque": "5.3.0",
+    "playwright": "1.63.0",
+    "three": "0.186.1"
+  }
+}
