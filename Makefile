@@ -17,7 +17,7 @@ fuzz:
 	go test -run=NONE -fuzz=FuzzParseLot -fuzztime=30s ./engine
 
 wasm:
-	GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w" -o site/assets/rainward.wasm ./cmd/wasm
+	GOOS=js GOARCH=wasm go build -trimpath -buildvcs=false -ldflags="-s -w" -o site/assets/rainward.wasm ./cmd/wasm
 
 cli:
 	go build -trimpath -o build/rainward ./cmd/rainward
